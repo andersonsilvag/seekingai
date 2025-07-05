@@ -17,7 +17,7 @@ Pip (vem com Python)
 ⚡ Instalação Rápida
 bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/projeto-chat-api.git
+git clone https://github.com/andersonsilvag/seekingai
 cd projeto-chat-api
 
 # Crie e ative o ambiente virtual (recomendado)
@@ -34,9 +34,9 @@ bash
 cp .env.example .env
 Adquira suas chaves:
 
-🔑 DeepSeek API Key
+🔑 DeepSeek API Key: https://platform.deepseek.com/sign_in
 
-🔑 OpenAI API Key
+🔑 OpenAI API Key: https://platform.openai.com/api-keys
 
 Edite o .env:
 
@@ -72,4 +72,4 @@ Problemas? Abra uma issue
 "Recomendo testar ambas APIs para comparar desempenho e resultados em diferentes cenários de chat!"
 
 ## 📜 Licença
-Este projeto está licenciado sob a [MIT License](/LICENSE) - © 2025 [Anderson da Silva Gonçalves](https://github.com/seu-usuario).
+Este projeto está licenciado sob a [MIT License](/LICENSE) - © 2025 [Anderson da Silva Gonçalves](https://github.com/andersonsilvag).
