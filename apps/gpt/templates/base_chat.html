@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pergunte ao chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto py-8">
+        <div class="bg-white shadow-lg rounded-lg p-8">
+            <h1 class="text-3xl font-bold mb-4">CHAT.AI - {% block api_title %}{% endblock %}</h1>
+            <form id="form">
+                {% csrf_token %}
+                <h1 class="text-3xl font-bold mb-4">Descreva sua pergunta</h1>
+                <span id="count-caracter">0</span> Caracteres
+                <div class="flex items-center space-x-4">
+                    <textarea id="question" class="w-full h-64 p-4 bg-gray-100 mb-4"></textarea>
+                    <button class="bg-blue-500 text-white py-3 px-6 rounded-lg" type="submit">
+                        Pergunta
+                    </button>
+                </div>
+                <hr>
+                <span id="count-token">0</span> token(s) (Mínimo: 1. Máximo: 4000) (Observação: Quantidade pode ser
+                imprecisa)
+
+                <div class="htmx-indicator h-2 w-2 bg-blue-500 invisible rounded-full"></div>
+                <h1 class="text-3xl font-bold mb-4">Resposta a sua pergunta</h1>
+                <textarea id="answer" class="w-full h-64 p-4 bg-gray-100 mb-4" readonly></textarea>
+                <div id="loading"
+                    class="hidden w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin mx-auto my-8">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const question = document.getElementById("question");
+            const countCaracter = document.getElementById("count-caracter");
+
+            question.addEventListener("keyup", function () {
+                const count = this.value.length;
+                countCaracter.innerText = count;
+            });
+
+            const countToken = document.getElementById("count-token");
+            question.addEventListener("keyup", function () {
+                const words = this.value.split(" ");
+                countToken.innerText = words.length * 0.75;
+            });
+
+            $('#form').submit(function (event) {
+                event.preventDefault();
+                document.getElementById("loading").classList.remove("hidden");
+                document.getElementById("answer").classList.add("hidden");
+
+                const questionValue = document.getElementById("question").value;
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                fetch('{% block api_endpoint %}{% endblock %}', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ question: questionValue })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("answer").textContent = data.answer;
+                        document.getElementById("loading").classList.add("hidden");
+                        document.getElementById("answer").classList.remove("hidden");
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data:", error);
+                        document.getElementById("loading").classList.add("hidden");
+                        document.getElementById("answer").textContent = "Error: Unable to fetch data";
+                        document.getElementById("answer").classList.remove("hidden");
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

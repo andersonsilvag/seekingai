@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sair{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="card shadow-lg p-4 text-center" style="width: 100%; max-width: 420px;">
+        <i class="bi bi-box-arrow-right" style="font-size: 3rem; color: #dc3545;"></i>
+        <h3 class="mt-2">Você saiu</h3>
+        <p class="text-muted small">Sessão finalizada com sucesso.</p>
+        <a href="{% url 'login' %}" class="btn btn-primary mt-3">Entrar novamente</a>
+    </div>
+</div>
+{% endblock %}
